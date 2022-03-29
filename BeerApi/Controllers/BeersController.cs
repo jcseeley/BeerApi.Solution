@@ -11,23 +11,40 @@ namespace BeerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BeersControllers : ControllerBase
+    public class BeersController : ControllerBase
     {
         private readonly BeerApiContext _context;
 
-        public BeersControllers(BeerApiContext context)
+        public BeersController(BeerApiContext context)
         {
             _context = context;
         }
 
-        // GET: api/BeersControllers
+        // GET: api/Beers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Beer>>> GetBeers()
+        public async Task<ActionResult<IEnumerable<Beer>>> GetBeers(string style, string brewery, string name, double abv)
         {
-            return await _context.Beers.ToListAsync();
+            var query = _context.Beers.AsQueryable();
+            if (style != null)
+            {
+              query = query.Where(entry => entry.Style == style);
+            }
+            if (brewery != null)
+            {
+              query = query.Where(entry => entry.Name == name);
+            }
+            if (brewery != null)
+            {
+              query = query.Where(entry => entry.Brewery == brewery);
+            }
+            if (abv > 0)
+            {
+              query = query.Where(entry => entry.Abv >= abv);
+            }
+            return await query.ToListAsync();
         }
 
-        // GET: api/BeersControllers/5
+        // GET: api/Beers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Beer>> GetBeer(int id)
         {
@@ -41,7 +58,7 @@ namespace BeerApi.Controllers
             return beer;
         }
 
-        // PUT: api/BeersControllers/5
+        // PUT: api/Beers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBeer(int id, Beer beer)
@@ -72,7 +89,7 @@ namespace BeerApi.Controllers
             return NoContent();
         }
 
-        // POST: api/BeersControllers
+        // POST: api/Beers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Beer>> PostBeer(Beer beer)
@@ -80,10 +97,10 @@ namespace BeerApi.Controllers
             _context.Beers.Add(beer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetBeer), new { id = beer.BeerId }, beer);
+            return CreatedAtAction("GetBeer", new { id = beer.BeerId }, beer);
         }
 
-        // DELETE: api/BeersControllers/5
+        // DELETE: api/Beers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBeer(int id)
         {
