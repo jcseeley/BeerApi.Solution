@@ -29,9 +29,9 @@ namespace BeerApi.Controllers
             {
               query = query.Where(entry => entry.Style == style);
             }
-            if (brewery != null)
+            if (name != null)
             {
-              query = query.Where(entry => entry.Name == name);
+              query = query.Where(entry => entry.Name.Contains(name));
             }
             if (brewery != null)
             {
@@ -115,7 +115,19 @@ namespace BeerApi.Controllers
 
             return NoContent();
         }
+        [HttpGet("abv")]
+        public async Task<ActionResult<IEnumerable<Beer>>> GetBeers()
+        {
+          return await _context.Beers.OrderByDescending(beer => beer.Abv).ToListAsync();
+        }
 
+        [HttpGet("random")]
+        public async Task<ActionResult<Beer>> GetRandom()
+        {
+          Random rand = new Random();
+          int id = rand.Next(1, _context.Beers.Count() + 1);
+          return await _context.Beers.FindAsync(id);
+        }
         private bool BeerExists(int id)
         {
             return _context.Beers.Any(e => e.BeerId == id);

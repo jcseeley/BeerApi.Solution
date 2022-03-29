@@ -18,7 +18,7 @@ namespace BeerApi.Models
           new Beer { BeerId = 3, Name = "Guinness", Brewery = "Guinness", Style = "Stout", Abv = 4.2 },
           new Beer { BeerId = 4, Name = "Blueberry Muffin", Brewery = "Great Notion", Style = "Sour", Abv = 6 },
           new Beer { BeerId = 5, Name = "Blue Moon", Brewery = "Blue Moon", Style = "Wheat", Abv = 5 },
-          new Beer { BeerId = 6, Name = "Tecate", Brewery = "Tecate", Style = "Lager", Abv = 4.5 },
+          new Beer { BeerId = 6, Name = "Corona", Brewery = "Corona", Style = "Lager", Abv = 4.5 },
           new Beer { BeerId = 7, Name = "Ripe", Brewery = "Great Notion", Style = "IPA", Abv = 7 }
         );
     }
