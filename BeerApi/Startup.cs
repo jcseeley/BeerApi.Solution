@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using BeerApi.Models;
-
+/// required for versioning
+using Microsoft.AspNetCore.Mvc;
+///
 namespace BeerApi
 {
     public class Startup
@@ -19,8 +21,14 @@ namespace BeerApi
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-
+        {   
+            // to add versioning
+            services.AddApiVersioning(o => {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 0);
+            });
+            ////
             services.AddDbContext<BeerApiContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             services.AddControllers();
